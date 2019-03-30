@@ -1,0 +1,16 @@
+
+// Functions may be declared as extern "C".
+// This indicates, a function is following the C ABI.
+
+extern "C" sub memcpy(var dst: void *, var src: void *, var n: uint): void *;
+
+// You may also create function with C ABI:
+extern "C" sub
+memcpy(var dst: void *, var src: void *, var n: uint): void *
+{
+    var d = cast<u8 *>(dst);
+    var s = cast<u8 *>(src);
+    for (var i = 0; i < n; ++i)
+        *d++ = *s++;
+    return dst;
+}

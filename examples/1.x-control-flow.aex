@@ -1,0 +1,51 @@
+sub main(): void
+{
+    const cond = true;
+
+    // IF expression
+    if (true) {
+        /* do something */
+    }
+
+
+    // FOR loop
+    for (var i = 0; i < 10; ++i) {
+        /* do something */
+    }
+
+
+    // FOREACH loop
+    foreach (const i in range(0, 10)) {
+        /* do something */
+    }
+
+
+    // WHILE loop
+    while (true) {
+        /* do something */
+    }
+
+
+    // DO-WHILE loop
+    do {
+        /* foo */
+    } while (0);
+
+
+    // LABELS
+    // To break multiple layers of loops, use a label:
+    'outer: for (var x = 0; x < 100; ++x) {
+        'inner: for (var y = 0; y < 100; ++y) {
+            break 'outer;
+        }
+    }
+
+
+    // UNREACHABLE
+    // Certain branches may be marked unreachable:
+    const x = 10;
+    if (x == 12) {
+        unreachable;
+    }
+
+}

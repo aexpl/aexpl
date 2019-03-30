@@ -1,0 +1,13 @@
+
+// Possible `main` signatures:
+
+sub main(): void;
+
+sub main(const argc: int, const argv: [u8]): void;
+
+// Implementation:
+
+sub main(): void
+{
+    std::exit(0);
+}

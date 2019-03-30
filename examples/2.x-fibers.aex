@@ -1,0 +1,54 @@
+
+// AEXPL has both stackless & stackful coroutines.
+// Stackful coroutines are called "Fiber"s.
+
+sub range-generator(const range: Range<int>): int {
+    foreach (const i in range) {
+        // Yield takes any arguments, and will return them to the caller.
+        Fiber::yield(i);
+    }
+};
+
+sub main(): void
+{
+    // New fibers are created using `Fiber::new`.
+    var generator = Fiber::new {
+        // Inside a fiber you may `yield`, returning a value to the caller.
+        (1..10).map(λ(i) {
+            Fiber::yield(i);
+        };
+
+        // You can get access to the current fiber as well, through:
+        const current = Fiber::current();
+    };
+
+    // You can check the status of the fiber with `is-done`.
+    while (!generator.is-done) {
+        // We can call the fiber via `operator()(...)` or `call(...)`.
+        std::println("%d", generator());
+    }
+
+    // Once a fiber is done, they can be reset using `reset`
+    generator.reset();
+
+    // Reset optionally takes in a new function:
+    // (You may also just pass in a subroutine, instead of a lambda)
+    generator.reset(range-generator(1..10));
+
+
+    // Not only can `yield` return, we can also pass arguments:
+    var fib = Fiber::new(λ(const param) {
+        std::println(param);                // actually prints the 'first'
+        const ret = Fiber::yield("second"); // returns 'second' from the call
+        std::println(ret);                  // prints the 'third' string from the second call
+    });
+
+    const ret = fib("first"); // prints 'first'
+    std::println(ret);        // prints 'second'
+    fib("third");             // prints 'third'
+
+
+    // Fibers also have a transfer function:
+    // TODO: Document transfer.
+}
+

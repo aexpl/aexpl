@@ -1,0 +1,53 @@
+
+sub main(): void
+{
+    // No captures (capture list is optional):
+    const quad = λ(const x: int): int {
+        return x * x;
+    };
+
+    const x = 10;
+    const x-squared = quad(x);
+    assert(x == 100, "incorrectly squared");
+
+
+    // With captures (by borrow/reference):
+    const quart = λ[&quad](const x: int): int {
+        return quad(x) * quad(x);
+    };
+
+    const y = 2;
+    const y-quart = quart(y);
+    assert(y == 16, "incorrectly squared");
+
+
+    // With captures (by copy):
+    const x-summed = λ[var x = x](const y: int): int {
+        x += y;
+        return x;
+    };
+
+    const x1 = x-summed(5);
+    assert(x1 == 15, "incorrectly summed");
+    assert(x == 10, "modified outer x");
+
+    const x2 = x-summed(10);
+    assert(x2 == 25, "incorrectly summed");
+    assert(x == 10, "modified outer x");
+
+    // Types, inside the parameter, are optional:
+    // Lambdas expect an expression after the parameter list:
+    const multiply = λ(x, y) x * y;
+    const result = multiply(2, 5);
+    assert(result == 10, "incorrectly calculated");
+
+    // Lambdas with no arguments may just be declared with λ:
+    const z = λ {
+        return 10;
+    }();
+    assert(z == 10, "lambda invoke went wrong");
+
+    const w = (λ 10)();
+    assert(w == 10, "lambda invoke went wrong");
+}
+

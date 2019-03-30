@@ -1,0 +1,21 @@
+
+sub main(): void
+{
+    // There are three types of smart pointers:
+
+    // UNIQUE
+    // A pointer which can only have a single owner, however, may be borrowed,
+    // as long as the owner retains the pointer.
+    const unique = Unique<int>::new(10);
+
+
+    // SHARED
+    // A pointer which may have multiple owners.
+    // It's ref-counted internally, and should be used sparingly.
+    const shared = Shared<int>::new(10);
+
+
+    // ATOMIC SHARED
+    // Same as shared, just with an atomic ref-count.
+    const ashared = SharedAtomic<int>::new(10);
+}

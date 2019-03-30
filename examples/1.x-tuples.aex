@@ -1,0 +1,23 @@
+
+sub main(): void
+{
+    // Tuples are declared using (T, T1, ...)
+    const t1: (int, int) = (12, 13);
+
+    // Tuples may be destructured:
+    const ( fst, snd ) = t1;
+    assert(fst == 12, "error");
+    assert(snd == 13, "error");
+
+    // Ignoring tuple members is explicit:
+    const ( fst, .. ) = t1;
+    assert(fst == 12, "error");
+
+    // Tuples may also be created using the Tuple constructor:
+    const t2 = Tuple { 12, 13 };
+    assert(t1 == t2, "error");
+
+    // One element tuples need the trailing comma:
+    const t3 = (12,);
+}
+

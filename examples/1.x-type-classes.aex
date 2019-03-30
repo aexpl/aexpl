@@ -1,0 +1,63 @@
+
+// Type classes specify constraints a type has to implement.
+// They may neither carry state, nor implement any of the functions.
+class Copyable {
+    // If the record variable is called `this`, it's implicit:
+    // `This` refers to the type of the implementor.
+    sub copy(const this: &This): This;
+}
+
+
+// Create a copyable record:
+record Position2D : Copyable {
+    pub var x: float;
+    pub var y: float;
+}
+
+sub Position2D::copy(const this: &Position2D): Position2D
+{
+    // `this` is *NOT* implicit. The Position2D constructor can infer the names:
+    return Position2D { this.x, this.y };
+}
+
+
+// Type classes may be used in a generic context:
+sub is-copyable<T>(): bool { return false; }
+sub is-copyable<T: Copyable>(): bool { return true; }
+
+
+// Or like a Concept:
+class Screen; // assume an implementation.
+class Drawable {
+    sub draw(const this: &This, const screen: &Screen): void;
+}
+
+// Drawable is used directly inside the type.
+// This is a generic function!!!
+sub draw-all(const drawables: &[Drawable]): void
+{
+    foreach (const drawable in drawables.iter()) {
+        drawable.draw();
+    }
+}
+
+// The previous function is equivalent to:
+sub draw-all<T: Drawable>(const drawables: &[T]): void
+{
+    foreach (const drawable in drawables.iter()) {
+        drawable.draw();
+    }
+}
+
+
+// Type classes may also be combined:
+class Drawable-and-Copyable = Copyable & Drawable;
+
+
+// They may also be generic:
+class Vector<T> {
+    sub reserve(var this: &This, const n: int): void;
+    sub push(var this: &This, const elem: &T): void;
+    sub operator[](var this: &This, const i: int): &T;
+}
+

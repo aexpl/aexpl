@@ -1,0 +1,18 @@
+
+sub divide(const dividend: int, const divisor: int): int
+    // `requires` are PRE conditions
+    requires(divisor != 0);
+
+    // `ensures` are POST conditions
+    ensures(return == divident / divisor);
+{
+    return divident / divisor;
+}
+
+
+sub add-one(const val: int): int
+    // old values may be accessed using the special 'old' function
+    ensures(return == old(val);
+{
+    return val + 1;
+}

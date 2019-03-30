@@ -1,0 +1,22 @@
+
+
+@pure
+sub divide(const dividend: int, const divisor: int): int
+    requires(divisor != 0)
+{
+    return dividend / divisor;
+}
+
+// Tests may be embedded directly into the source code using `test`
+test "divide by zero panics" {
+    // You can test contract violations:
+    require-contract-violation({
+        divide(10, 0);
+    });
+
+    // Or test all sorts of things:
+    require(divide(10, 2) == 5);
+}
+
+// A `test` block may only be put at top-level.
+// And should not have any side-effects.

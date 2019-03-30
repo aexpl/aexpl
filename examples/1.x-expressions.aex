@@ -1,0 +1,51 @@
+sub getCond(): bool
+{
+    return true;
+}
+
+sub main(): void
+{
+    // Everything is an expression
+    const cond = getCond();
+
+    const getNum = sub getNum(): int {
+        return 42;
+    };
+
+    // The last expression will be the return value:
+    const x = if (cond) {
+        const x = getNum();
+        if (num > 0) {
+            num;
+        } else {
+            num + 1;
+        }
+    } else {
+        0;
+    };
+
+
+    // Same goes for loops:
+    // This construct may be used for retrying certain operations.
+    var i = 0;
+    const sum = while (true) {
+        i += 1;
+        if (i == 0)
+            break i;
+        // You *must* use a break to return a value!
+    };
+
+
+    // Expression blocks may be inserted to create a new scope.
+    {
+        // But may *not* shadow:
+        var i = 0;
+        //  ^ error: variable name already seen
+
+
+        // You may also break from blocks:
+        break;
+
+        std::println("i will never be reached");
+    }
+}

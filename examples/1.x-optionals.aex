@@ -1,0 +1,69 @@
+
+// Optionals are not a language feature, but achieved through a generic variant.
+// This is the implementation from the standard library:
+class TOptional<T> {
+    sub get-or-die(const this: &This): T;
+    sub get-or-default(const this: &This, const default: T): T;
+    sub has-value?(const this: &This): bool;
+}
+
+variant Optional<T> : TOptional<T> = None | Some: T;
+
+sub Optional::get-or-die(const this: &This): T
+{
+    return match(this) {
+    Some val -> val;
+    None -> die("error: optional not filled");
+    };
+}
+
+sub Optional::get-or(const this: &This, const default: T): T
+{
+    return match(this) {
+    Some val -> val;
+    None -> default;
+    };
+}
+
+sub Optional::has-value(const this: &This): bool
+{
+    return match(this) {
+    Some _ -> true
+    None -> false;
+    };
+}
+
+
+// `Optional` is a "magic" type. Returning them from a function is free!
+sub get-cute-cat(const name: &[u8]): Optional<Image>
+{
+    return get_cat(name)
+        |> add_bow_tie()
+        |> make_eyes_sparke()
+        |> make_smaller()
+        |> add_rainbox();
+}
+
+
+// Their usage is very similar to C++ optionals:
+sub main(): void
+{
+    var opt = Optional<int> { None };
+    assert(!opt.has-value?());
+
+    var opt2 = Optional { Some 10 };
+    assert(opt2.has-value?());
+    assert(opt2.get-or-die() == 10);
+
+    // They may also be used like OCaml optionals:
+    match (opt2) {
+    Some x -> std::println("opt2s value is %@", x);
+    None -> std::println("opt2 is empty");
+    }
+
+
+    // Optional pointers are another optimization, and take the
+    // same amount of space as a normal pointer:
+    var opt4 = Optional<int *> { None };
+}
+

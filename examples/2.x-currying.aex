@@ -1,0 +1,28 @@
+
+sub add(const x: int, const y: int): int
+{
+    return x + y;
+}
+
+// A function, taking a function:
+typedef apply-function<T> = sub(const e: T): T;
+
+sub apply<T>(var arr: &[T], const f: apply-function<T>): &[T]
+{
+    foreach (var e in arr.iter())
+        e = apply-function(e);
+    return arr;
+}
+
+
+sub main(): void
+{
+    var arr = [1, 2, 3, 4, 5];
+    apply(arr[:], add(1));
+    apply(arr[:], λ(x) add(1, x));
+
+    // will print 2 3 4 5 6
+    foreach (const e in arr.iter())
+        std::println("%d", e);
+}
+

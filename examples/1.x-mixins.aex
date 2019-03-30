@@ -1,0 +1,59 @@
+// --- EXAMPLE 1 ---
+// {{{1
+
+// Normal records may be used as mixins.
+record Singer;
+
+sub Singer::sing(const this: This &): void
+{
+    std::println("sing ...");
+}
+
+
+// To implement a mixin, use parans after the record name:
+record Bird(Singer);
+
+sub main(): void
+{
+    const bird = Bird{};
+    bird.sing(); // will print 'sing ...'
+}
+
+// 1}}}
+
+
+// --- EXAMPLE 2 ---
+// {{{2
+
+// Mixins may be combined with classes or interfaces:
+class TSinger {
+    sub sing(const this: &This): void;
+}
+
+record Singer : TSinger;
+
+sub Singer::sing(const this: &This): void
+{
+    std::println("sing ...");
+}
+
+record Bird(Singer);
+
+// The record is now able to override the `sing` implementation:
+sub override Bird::sing(const this: &This): void
+{
+    std::println("Chirp ...");
+}
+
+
+sub main(): void
+{
+    const bird = Bird{};
+    bird.sing(); // prints 'Chirp ...'
+
+    const singer = Singer{};
+    singer.sing(); // prints 'Sing ...'
+}
+
+
+// 22}}}

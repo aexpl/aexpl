@@ -1,0 +1,68 @@
+
+record Position3D {
+    pub var x: float;
+    pub var y: float;
+    pub var z: float;
+}
+
+variant Color = Red | Green | Blue;
+
+variant Int-or-Float
+    = None
+    | Int: int
+    | Float: float;
+
+sub main(): void
+{
+    const tuple = (1, 2, 3);
+    const array = [1, 2, 3];
+    const pos = Position3D { .x = 1.0f, .y = 2.0f, .z = 3.0f };
+
+    // Matching tuples:
+    match (tuple) {
+    (1, x, 3) -> std::println("1st & 3rd element are 1 & 3, 2nd element is %d", x);
+    // _ will ignore the values:
+    (1, _, x) -> std::println("3rd element of tuple is: %d", x);
+    // Catch all:
+    _ -> std::println("catch all");
+    }
+
+
+    // A match may have a condition:
+    match (tuple) {
+    (x, y, _) if (x == y) -> std::println("x == y");
+    _ -> void;
+    }
+
+
+    // Matching arrays:
+    match (array) {
+    }
+
+
+    // Matching arbitrary types:
+    match (pos) {
+    }
+
+
+    // Matching enums:
+    const color = Color { Red };
+    match (color) {
+    Red -> std::println("Color is red");
+    Green -> std::println("Color is green");
+    Blue -> std::println("Color is blue");
+    }
+
+
+    // Matching variants:
+    const none = Int-or-Float { None };
+    const i = Int-or-Float { Int 10 };
+    const f = Int-or-Float { Float 1.0f };
+
+    // Try changing `none` to `i` or `f`:
+    match (none) {
+    None -> std::println("Empty");
+    Int x -> std::println("Contains int %d", x);
+    Float x -> std::println("Contains float %f", x);
+    }
+}

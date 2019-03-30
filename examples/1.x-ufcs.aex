@@ -1,0 +1,44 @@
+// AEXPL has no methods.
+
+record Vec4 {
+    pub const x: float;
+    pub const y: float;
+    pub const z: float;
+    pub const w: float;
+}
+
+// Functions may be *attached* to records.
+// Exported functions attached are public.
+sub Vec4::zero(): Vec4 {
+    return Vec4 { 0.0f, 0.0f, 0.0f, 0.0f };
+}
+
+// They are allowed to be called with UFCS based on their first argument:
+sub Vec4::cross(const v0: Vec4 &, const v1: Vec4 &): Vec4
+{
+    return Vec4 {
+        .x =   v0.y * v1.z - v0.z * v1.y,
+        .y = -(v0.x * v1.z - v0.z * v1.x),
+        .z =   v0.x * v1.y - v0.y * v1.x,
+        .w = 0.0f, // last trailing comma is optional
+    };
+}
+
+
+sub main(): void
+{
+    // Call a static function by name:
+    const zero-vector = Vec4::zero();
+
+    const a = Vec4 { 1.0f, 2.0f, 3.0f };
+    const b = Vec4 { 4.0f, 5.0f, 6.0f };
+
+    // All three function calls are equivalent:
+    const res1 = a.cross(b);
+    const res2 = cross(a, b);
+    const res3 = Vec4::cross(a, b);
+
+    assert(res1.x == -3.0f, "error");
+    assert(res1.y == 6.0f, "error");
+    assert(res1.z == -3.0f, "error");
+}

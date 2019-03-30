@@ -1,0 +1,27 @@
+
+// Functions are declared with `sub`:
+// Parameters may also declared with `var`, if mutability is desired.
+sub multiply(const x: int, const y: int): int
+{
+    return x * y;
+}
+
+sub main(): void
+{
+    // Normal function call syntax:
+    const x = multiply(2, 5);
+    assert(x == 10);
+
+    // With named arguments:
+    const y = multiply(.x = 5, .y = 10);
+    assert(y == 50);
+
+
+    // Functions can also be created inside functions:
+    const add = sub(const x: int, const y: int): int {
+        return x + y;
+    };
+
+    const res = add(5, 10);
+    assert(res == 15);
+}

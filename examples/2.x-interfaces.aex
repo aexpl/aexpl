@@ -1,0 +1,29 @@
+
+// Interfaces are (essentially) all-virtual type-classes:
+// (Interfaces *must* start with an uppercase I.)
+interface IDrawable {
+    // All functions declared are public by default.
+    sub draw(): void;
+}
+
+// You need to specify your record implements IDrawable:
+record Circle : IDrawable {
+    pub var radius: float;
+    pub var center: Vec3;
+}
+
+// And of course implement the functions required:
+override sub Circle::draw(): void
+{
+    /* Implement drawing */
+}
+
+
+
+// Interfaces may also be "copied" from type classes:
+class Drawable {
+    sub draw(): void;
+}
+
+// It's a common pattern, to define both:
+interface IDrawable = Drawable;

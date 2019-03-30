@@ -1,0 +1,27 @@
+
+// One way of implementing properties is by explicitly declaring fields:
+record Position3D {
+    // Fields without 'pub' are private by default:
+    var _x: float;
+    var _y: float;
+    // You can also autogenerate properties using `prop` inside a record:
+    prop z: float;
+}
+
+prop Position2D::x : float {
+    get { return _x; }
+    set { _x = value; }
+}
+
+prop Position2D::y : float {
+    get { return _y; }
+    set { _y = value; }
+}
+
+
+sub main(): void
+{
+    // Properties can be accessed just like variables:
+    const pos = Position2D { .x = 10.0f, .y = 20.0f };
+}
+

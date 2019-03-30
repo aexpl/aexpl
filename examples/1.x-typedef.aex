@@ -1,0 +1,21 @@
+
+// Types can be aliased using `typedef`:
+typedef uint32_t = u32;
+
+// To create a strong typedef:
+type Minutes = u32;
+type Seconds = u32;
+
+sub main(): void
+{
+    // They convert implicitly, they're basically the same type with a different name:
+    const i0: u32 = 1;
+    const i1: uint32_t = 1;
+    assert(i0 == i1);
+
+    const mins = Minutes { 12 };
+    const hours = Hours { 2 };
+    // const x = mins + hours;
+    // ^^^^^^^^^^^^^^^^^^^^^^^
+    // does not compile!
+}

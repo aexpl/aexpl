@@ -1,0 +1,67 @@
+sub main(): void
+{
+    // Constant integers:
+    // Type inferred, integer literals are `int` by default.
+    const x1 = 5;
+
+    // Explicit types:
+    const x2 = 5u64;
+    const x3: u64 = 5;
+
+    // Mutation is a compiler error:
+#if TEST_ERRORS
+    x1 = x1 + 2; // !!!error!!!
+#endif
+
+
+    // Mutable variables:
+    var x4 = 5;
+    var x5 = 5u64;
+    var x6: u64 = 5;
+
+    // Mutation is fine:
+    x4 = x4 + 2;
+
+
+    // Arrays:
+    const arr1 = [1, 2, 3];
+    const arr2: [int] = [1, 2, 3];
+    const arr3: [int 3] = [1, 2, 3];
+
+    // Length is stored alongside each array!
+    const arr1Len = arr1.length;
+
+    // Subscripting via []
+    const first = arr1[0];
+
+
+    // Slices:
+    const arr4 = [1, 2, 3, 4, 5];
+    // arrays are of type (array types always contain the length!):
+    // const arr4: int[5] = ...;
+    // they may also be passed as a ref
+
+    // Slices are of type:
+    const slice: &[int] = arr4[:];
+    // Slices are essentially a reference to an array.
+    // Just like arrays, slices store a length.
+    // { .begin = <ptr>, .length = <lenght> }
+
+    const allElements = arr4[:]; // all elements
+
+    const omitFirst1 = arr4[1:]; // all elements, except the first
+    const omitFirst2 = arr4[1:5]; // equivalent
+
+    const omitLast1 = arr4[:4]; // all elements, except the last
+    const omitLast2 = arr4[0:4]; // equivalent
+
+
+    // Large literals:
+    const large = 1_000_000;
+    // May be separated by underscores.
+
+    // Destructuring:
+    // See 1.x-records.aex
+    // See 1.x-tuples.aex
+}
+

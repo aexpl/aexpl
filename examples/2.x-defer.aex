@@ -1,0 +1,17 @@
+
+sub main(): void
+{
+    const file = std::File::open("readme.txt");
+    if (!file.is-open?())
+        die("File couldn't be opened");
+
+    // The expression which is deferred will be executed in reverse order.
+    defer file.close();
+
+    // It's possible to defer any arbitrary expression:
+    defer {
+        std::println("deferred ...");
+    };
+
+    // Use `file` ...
+}

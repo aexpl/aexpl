@@ -1,0 +1,100 @@
+
+// Currently supported attributes are:
+//   [...] is an optional part
+//   | is an alternation
+//
+// @inline([always | never])
+// @hot
+// @cold
+// @unused
+// @deprecated([ string ])
+// @nodiscard
+// @linkage
+// @linkname
+// @pure
+// @noreturn
+// @alignas(int)
+// @packed([ alignment ])
+// @likely
+// @unlikely
+// @unroll(num-iterations) (only applies to loops)
+// @nounroll
+// @opt(disable | enable)
+// @runtime-only
+// @comptime-only
+// @enable-safety-checks(true | false)
+
+// Attributes may be freestanding:
+@!name("attributes");
+// the ! is required for freestanding attributes!
+
+// Attributes may be attached to functions:
+@pure
+sub divide(const dividend: int, const divisor: int): int
+    requires(divisor != 0)
+{
+    return dividend / divisor;
+}
+
+sub main(): void
+{
+    // Or to variables:
+    @alignas(32) const i: int = 0;
+
+    // Or blocks:
+    const x = @pure {
+        std::println("not pure");
+        // ^^^^^^^^^^^^^^^^^
+        // error: may only call other pure functions
+        5 + 2;
+    };
+
+    // Or expressions:
+    @likely if (i == 10) {
+        std::println("i is very likely to be 10");
+    }
+
+    // You can disable runtime checks, like array out-of-bounds selectively:
+    @enable-safety-checks(false)
+    {
+        // Hot code!
+    }
+
+    // Certain attributes, like @pure and @alignas are built-in.
+    // However, you may create your own custom attributes.
+    // By convention, built-in attributes are lower-case.
+}
+
+
+// New attributes may be created like records:
+$attribute Author {
+    pub var first: &[u8];
+    pub var last: &[u8];
+}
+
+@Author(first = "John", last = "Doe")
+const book: Book = {};
+
+
+// You may set default values:
+$attribute Edible {
+    pub var value: bool = false;
+}
+
+@Edible(true) // same as @Edible(value = true)
+const item = Carrot {};
+
+
+// Or create empty attributes:
+$attribute Serializable;
+
+@Serializable
+record Packet {
+    pub var id: int;
+    pub var content: &[u8];
+}
+
+
+// Attributes may be accessed at compile time via reflection:
+
+

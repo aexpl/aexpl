@@ -1,0 +1,44 @@
+
+// Define a new record:
+rec Position2D {
+    pub var x: f32;
+    pub var y: f32;
+}
+
+sub destructure(const pos: Position2D): void
+{
+    const { x, y } = pos;
+    assert(x == 1.0f, "error");
+    assert(y == 2.0f, "error");
+
+    // Destructures may rename:
+    const { x = x1, y = y1 } = pos;
+    assert(x1 == 1.0f, "error");
+    assert(y1 == 2.0f, "error");
+
+    // Ignoring must be explicit:
+    const { x = x2, .. } = pos;
+    assert(x2 == 1.0f, "error");
+}
+
+sub main(): void
+{
+    // Records may be initialized using designated initializers:
+    const pos1: Position2D = { .x = 10.0f, .y = 0.0f };
+    // Requires the left-hand side to declare a type.
+
+    const pos2 = Position2D { .x = 10.0f, .y = 0.0f };
+    // "Call" the constructor, if left-hand has no type.
+
+    // Names may be inferred.
+    const x = 1.0f;
+    const y = 2.0f;
+    const pos3 = Position2D { x, y };
+
+    // You can destructure records:
+    destructure(pos3);
+
+    // All records need to be fully initialized to be used.
+    // var pos: Position2D; // <= ERROR!
+}
+

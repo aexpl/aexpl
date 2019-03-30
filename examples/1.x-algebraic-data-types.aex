@@ -1,0 +1,76 @@
+
+// For product types see: 1.x-records.aex and 1.x-tuples.aex
+// For pattern matching examples see 1.x-pattern-matching.aex
+
+
+// Sum types:
+variant Int-or-Float = Int: int | Float: float;
+
+// Variants are tagged by default.
+
+// Untagged unions (for example to interact with C), may be created using
+// the `union` keyword. And act more like records.
+union Int-or-Float2 {
+    pub var _int: int;
+    pub var _float: float;
+}
+
+
+// Enums are special cases of variants:
+variant Color = Red | Green | Blue;
+
+
+// --- BINARY TREE ---
+// Binary trees can be described as recursive variants:
+variant Binary-Tree<T> = Leaf: T | Tree: (Binary-Tree<T>, Binary-Tree<T>);
+
+// Functions may also be attached to types / variants:
+sub Binary-Tree<T>::new(const value: T): Binary-Tree<T>
+{
+    return Binary-Tree { Leaf value };
+}
+
+
+
+// --- LINKED LIST ---
+// The canonical example, a linked list variant type:
+variant List<T> = Nil | Cons: (T, Unique<List<T>>)
+
+
+// Variant types can be patterned matched:
+sub List<T>::new(): List<T>
+{
+    // Create an empty list.
+    return List { Nil };
+}
+
+// Prepend item to list:
+sub List<T>::cons(const list: &List<T>, const value: T): List<T>
+{
+    return List { Cons (value, Unique::new(list)) };
+}
+
+// First item of list:
+sub List<T>::car(const list: &List<T>): List<T>
+{
+    return match (list) {
+    Nil => List { Nil };
+    Cons => {
+        const { hd, _ } = list;
+        hd;
+    }
+    };
+}
+
+// Rest of list:
+sub List<T>::cdr(const list: &List<T>): List<T>
+{
+    return match (list) {
+    Nil => throw Exception("empty list");
+    Cons => {
+        const { _, tl } = list;
+        tl;
+    }
+    };
+}
+

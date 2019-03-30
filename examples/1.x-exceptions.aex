@@ -1,0 +1,62 @@
+
+variant ErrorCode
+    = Ok
+    | File-Exists;
+
+record File {
+    var handle: int;
+}
+
+sub File::create(const name: &[u8]): File throws
+{
+    const fd = std::unix::open(name.to-c-string(), O_RDWR);
+    if (fd == -1)
+        throw ErrorCode { File-Exists };
+    return File { .handle = fd };
+}
+
+sub create-project(const name: &[u8]): (File, File) throws
+{
+    // Every expression which might throw needs to be preceeded by a `try`.
+    var readme = try File::create("readme.txt");
+
+    // `try` expressions may only be used in functions marked `throws`.
+    var main-source = try File::create("main.aex");
+
+    return (readme, main-source);
+}
+
+sub main(): void
+{
+    {
+        const (readme, main) = try create-project("ui-lib");
+        //                     ^^^
+        //                     Error: `try` can only be used in `throws` function.
+
+        // Defers are still executed if an exception is thrown:
+        defer readme.close();
+        defer main.close();
+
+        // To call a throwing function, we need a catch:
+    } catch (const err) {
+        // Catch may be attached to any statement (if, while, for, etc).
+        // The error can be accessed through `err`.
+        // The error is always of type `ErrorCode`.
+        std::println("could not create project");
+    }
+
+
+    // You may also convert errors into optionals, using `try?`:
+
+    {
+        match (try? create-project("ui-lib")) {
+        Some (readme, main) -> std::println("project created!");
+        None -> std::println("could not create project");
+        }
+    }
+
+
+    // Or, errors can be converted into an implicit `die`:
+    const (readme, main) = try! create-project("ui-lib");
+    // use the project here, if we reach here, no error is ocurred.
+}
